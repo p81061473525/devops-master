@@ -1,0 +1,27 @@
+name: DevOps CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check for updates
+        run: |
+          git submodule update --remote --merge
+          if [[ $(git diff --name-only HEAD@{1} HEAD) == *"https://github.com/p81061473525/devops-front"* ]]; then
+            echo "Submodule has been updated. Triggering CI/CD for DevOps."
+            # 在这里触发 DevOps 的 CI/CD 流程
+          else
+            echo "No updates found in the submodule."
+          fi
